@@ -1,82 +1,60 @@
 // TODO: revisit implementation using answer from course
 
 function printRecords(recordIds) {
+  // TODO
+
+  const recordsList = [];
   if (recordIds) {
-    const studentList = [];
+    recordIds.forEach((id) => {
+      recordsList.push(
+        studentRecords.find((studentRecord) => studentRecord.id == id)
+      );
+    });
 
-    function searchByStudentId(recordId) {
-      function getStudentRecord(currentRecord) {
-        const { id } = currentRecord;
-        return id == recordId;
-      }
-      studentList.push(studentRecords.find(getStudentRecord));
-    }
-
-    function sortRecords(recordA, recordB) {
-      if (recordA.name > recordB.name) {
-        return 1;
-      }
-      if (recordA.name < recordB.name) {
-        return -1;
-      }
-      return 0;
-    }
-
-    function printResults(record) {
-      if (record) {
+    recordsList
+      .sort((recordA, recordB) => {
+        if (recordA.name > recordB.name) {
+          return 1;
+        }
+        if (recordA.name < recordB.name) {
+          return -1;
+        }
+        return 0;
+      })
+      .forEach((record) =>
         console.log(
           `${record.name} (${record.id}): ${!record.paid ? "Not Paid" : "Paid"}`
-        );
-      }
-    }
-
-    recordIds.forEach(searchByStudentId);
-
-    studentList.sort(sortRecords).forEach(printResults);
+        )
+      );
   }
 }
 
 function paidStudentsToEnroll() {
   // TODO
-
   const paidStudentsToEnroll = studentRecords
-    .filter(function getPaidUnEnrolled(studentRecord) {
-      return (
+    .filter(
+      (studentRecord) =>
         studentRecord.paid && !currentEnrollment.includes(studentRecord.id)
-      );
-    })
-    .map(function getStudentsIds(studentRecord) {
-      studentRecord.id;
-    });
+    )
+    .map((studentRecord) => studentRecord.id);
 
   return [...currentEnrollment, ...paidStudentsToEnroll];
 }
 
 function remindUnpaid(recordIds) {
   // TODO
-
   const recordsList = [];
 
   if (recordIds) {
-    recordIds.forEach(function iterateRecords(id) {
+    recordIds.forEach((id) => {
       recordsList.push(
-        studentRecords.find(function findStudentById(studentRecord) {
-          return studentRecord.id == id;
-        })
+        studentRecords.find((studentRecord) => studentRecord.id == id)
       );
     });
   }
 
   printRecords(
-    recordsList
-      .filter(function getUnpaidStudents(student) {
-        if (student) {
-          return !student.paid;
-        }
-      })
-      .map(function getStudentsIds(student) {
-        return student.id;
-      })
+    recordsList.filter((student) => !student.paid).map((student) => student.id)
   );
 }
 
